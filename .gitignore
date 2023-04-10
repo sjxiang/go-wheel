@@ -1,11 +1,37 @@
 
-# custom
+# 忽略以下文件和目录
 
-webx.py
-go.sum
-gin.md
-reflect.md
-document.md
-# 
+# 二进制文件
+*.exe
+*.dll
+*.so
+*.dylib
 
-/doc
+# 执行文件
+/bin/
+/pkg/
+/obj/
+/vendor/
+*.test
+
+# 已编译文件
+*.o
+
+# IntelliJ IDEA 相关文件夹和文件
+.idea/
+*.iml
+*.ipr
+*.iws
+out/
+
+# VSCode 相关文件夹和文件
+.vscode/
+.settings/
+.code-workspace
+
+# 其他编辑器相关文件夹和文件
+*~
+*.swp
+.DS_Store
+
+/doc/
