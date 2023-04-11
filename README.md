@@ -36,12 +36,8 @@ ORM 框架（object relational mapping, 对象关系映射）
 
 
 
-
-3. 掌握 HTTP Server 和 Context 的设计，并且提供丰富 API
-
 4. 掌握 HTTP 中 Session 的设计和实现
 
-5. 掌握 Web 框架中 AOP 的解决方案
 
 6. 设计并实现简单的静态资源服务器
 
@@ -77,6 +73,7 @@ ORM 框架（object relational mapping, 对象关系映射）
     Gin 中 Handler 的设计与实现
     Beego 中 Filter 的设计与实现
     Kratos 中 Middleware 的设计与实现
+
 
 
 代码演示：为 Web 框架提供 AOP 支持，并且支持
