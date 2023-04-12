@@ -31,7 +31,7 @@ type HTTPServer struct {
 	// addr string 创建的时候传递，而不是 Start 接收。这个都是可以的
 
 	router
-	ms []Middleware
+	ms        []Middleware
 }
 
 func NewHTTPServer() *HTTPServer {
