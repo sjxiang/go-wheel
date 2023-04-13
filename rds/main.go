@@ -3,6 +3,7 @@ package main
 import (
 	"context"
 	"log"
+	"net/http"
 	"os"
 	"time"
 
@@ -16,8 +17,9 @@ import (
 	sdktrace "go.opentelemetry.io/otel/sdk/trace"
 	semconv "go.opentelemetry.io/otel/semconv/v1.10.0"
 
+	"github.com/gin-contrib/sessions"
+	"github.com/gin-contrib/sessions/cookie"
 
-	"github.com/sjxiang/go-wheel/rds/pkg/mws"
 	"github.com/sjxiang/go-wheel/rds/pkg/mws/opentelemetry"
 	"github.com/sjxiang/go-wheel/rds/pkg/mws/prometheus"
 )
@@ -47,17 +49,26 @@ func main() {
 	r := gin.New()
 
 	tracer := otel.GetTracerProvider().Tracer("extra/opentelemetry")
+	
+	store := cookie.NewStore([]byte("secret"))
+
 	r.Use(
-		mws.AccessLog(), 
-		opentelemetry.MiddlewareBuilder{
-			Tracer: tracer,
-			}.Build(),
-		prometheus.MiddlewareBuilder{
-			Namespace: "app",
-			Subsystem: "user",
-			Name: "http_response",
-		}.Build(),
+		opentelemetry.MiddlewareBuilder{Tracer: tracer}.Build(),
+		prometheus.MiddlewareBuilder{Namespace: "app", Subsystem: "user", Name: "http_response"}.Build(),
+		sessions.Sessions("custom-session", store),  // 一进入 context，就塞进去
 	)
+
+	r.GET("/hello", func(ctx *gin.Context) {
+		session := sessions.Default(ctx)  // 从 context 里面拿出来
+		if session.Get("hello") != "world" {
+			session.Set("hello", "world")
+			session.Save()
+		}
+
+		ctx.JSON(http.StatusOK, gin.H{
+			"hello": session.Get("hello"),
+		})
+	})
 
 	r.GET("/test", func(ctx *gin.Context) {
 		firstCtx, firstSpan := tracer.Start(ctx.Request.Context(), "First_layer")
@@ -70,6 +81,9 @@ func main() {
 
 		time.Sleep(300 * time.Millisecond)
 	})
+
+
+
 
 	initZipkin()
 

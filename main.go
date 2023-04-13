@@ -3,6 +3,8 @@ package main
 import (
 	"fmt"
 	"net/http"
+	"path"
+	"mime/multipart"
 
 	webx "github.com/sjxiang/go-wheel/webx/v4"
 	"github.com/sjxiang/go-wheel/webx/v4/middleware/accesslog"
@@ -22,6 +24,19 @@ func main() {
 		}
 		ctx.RespJSON(200, u.Name)
 	})
+
+	s.AddRoute(http.MethodPost, "/upload", func(ctx *webx.Context) {
+		f := webx.FileUploader{
+			// <input type="file" name="file" />
+			FileField: "file",
+			DstPathFunc: func(fh *multipart.FileHeader) string {
+				return path.Join("testdata", "upload", fh.Filename)
+			},
+		}.Handle()
+	
+		f(ctx)
+	})
+	
 	
 	s.Start(":8081")
 }

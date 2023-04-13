@@ -1,4 +1,4 @@
-package mws
+package accesslog
 
 import "github.com/gin-gonic/gin"
 
