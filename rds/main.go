@@ -17,6 +17,8 @@ import (
 	sdktrace "go.opentelemetry.io/otel/sdk/trace"
 	semconv "go.opentelemetry.io/otel/semconv/v1.10.0"
 
+	"go.opentelemetry.io/otel/exporters/jaeger"
+
 	"github.com/gin-contrib/sessions"
 	"github.com/gin-contrib/sessions/cookie"
 
@@ -111,6 +113,30 @@ func initZipkin() {
 					semconv.ServiceNameKey.String("opentelemetry-demo"),
 				),
 			),
+	)
+
+	otel.SetTracerProvider(tp)
+}
+
+
+func initJeager() {
+	url := "http://localhost:14268/api/traces"
+	exp, err := jaeger.New(jaeger.WithCollectorEndpoint(jaeger.WithEndpoint(url)))
+	if err != nil {
+		panic(err)
+	}
+	tp := sdktrace.NewTracerProvider(
+		// Always be sure to batch in production.
+		sdktrace.WithBatcher(exp),
+		// Record information about this application in a Resource.
+		sdktrace.WithResource(
+			resource.NewWithAttributes(
+				semconv.SchemaURL,
+				semconv.ServiceNameKey.String("opentelemetry-demo"),
+				attribute.String("environment", "dev"),
+				attribute.Int64("ID", 1),
+			),
+		),
 	)
 
 	otel.SetTracerProvider(tp)

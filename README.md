@@ -2,7 +2,7 @@
 # 造轮子，自娱自乐
 
 web 框架 
-ORM 框架（object relational mapping, 对象关系映射）
+ORM 框架（对象 -> SQL，结果集 -> 对象）
 缓存客户端
 
 
@@ -34,3 +34,10 @@ ORM 框架（object relational mapping, 对象关系映射）
     - 技术管理（人多坑少，PUA 较恶心 ... 脱离技术，很难回头）
 
 
+包装简历，啥都没有，那就参与开源项目（云原生 CNCF）
+
+使用经验（gin）
+
+
+
+Wire 老中普遍不喜欢代码生成

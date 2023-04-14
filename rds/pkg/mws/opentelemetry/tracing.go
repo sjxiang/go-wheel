@@ -58,3 +58,4 @@ func (m MiddlewareBuilder) Build() gin.HandlerFunc {
 	}
 }
 
+
